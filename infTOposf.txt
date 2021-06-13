@@ -1,0 +1,65 @@
+
+class Solution
+{
+public:
+//Function to convert an infix expression to a postfix expression.
+int precedence(char a)
+{
+if (a == '^')
+return 3;
+else if (a == '*' || a == '/')
+return 2;
+else if (a == '+' || a == '-')
+return 1;
+else if (a == '(')
+return 0;
+}
+
+string infixToPostfix(string s)
+{
+// Your code here
+stack<char> ss;
+string ans = "";
+
+for (int i = 0; i < s.length(); i++)
+{
+if (isalpha(s[i]))
+ans += s[i];
+else if (s[i] == '(')
+ss.push(s[i]);
+else
+{
+if (s[i] == ')')
+{
+while (ss.top() != '(')
+{
+ans += ss.top();
+ss.pop();
+}
+
+ss.pop();
+}
+else if (ss.empty() == true || precedence(s[i]) > precedence(ss.top()))
+ss.push(s[i]);
+else
+{
+while (ss.empty() == false && precedence(s[i]) <= precedence(ss.top()))
+{
+ans += ss.top();
+ss.pop();
+}
+
+ss.push(s[i]);
+}
+}
+}
+
+while (ss.empty() == false)
+{
+ans += ss.top();
+ss.pop();
+}
+
+return ans;
+}
+}
